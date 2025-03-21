@@ -41,6 +41,21 @@
                                 <li><a th:href="${home + 'employee/settings/email/ticket'}">Ticket Settings</a></li>
                             </ul>
                         </li>
+                        <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+                            <a th:href="${home + 'employee/settings/reset-database'}" class="text-danger">
+                                <i class="fas fa-database"></i> Reset Database
+                            </a>
+                        </li>
+                        <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+                            <a th:href="${home + 'employee/csv/import'}" class="text-primary">
+                                <i class="fas fa-file-csv"></i> Import CSV Data
+                            </a>
+                        </li>
+                        <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+                            <a th:href="${home + 'employee/csv/import'}" class="text-primary">
+                                <i class="fas fa-file-csv"></i> Generate Data
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Google Services</li>
