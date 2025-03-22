@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Import CSV</title>
+</head>
+<body>
+    <h1>Import CSV File</h1>
+    <form action="/api/csv/import-tickets" method="post" enctype="multipart/form-data">
+        <label for="csvFile">Choose CSV File:</label>
+        <input type="file" id="csvFile" name="csvFile">
+        <button type="submit">Import</button>
+    </form>
+</body>
+</html>
