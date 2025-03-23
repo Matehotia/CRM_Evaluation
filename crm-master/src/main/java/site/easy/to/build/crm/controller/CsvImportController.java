@@ -286,6 +286,9 @@ public class CsvImportController {
             customer.setEmail(email);
             customer.setName(name);
             customer.setPhone(phone);
+            User user = new User();
+            user.setId(52);
+            customer.setUser(user);
 
             // Ajout des champs optionnels
             if (!data[3].trim().isEmpty()) customer.setAddress(data[3].trim().replaceAll("^\"|\"$", ""));
