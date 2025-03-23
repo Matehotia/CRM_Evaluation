@@ -43,17 +43,13 @@
                         </li>
                             <li>
                                 <a th:href="${home + 'database/settings/reset-database'}">Reset Database</a>
+                            </li>   
+                            </li>                          
+                            <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+                                <a th:href="${home + 'employee/csv/importCsv'}" class="text-primary">
+                                    CSV importer
+                                </a>
                             </li>
-                        <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
-                            <a th:href="${home + 'employee/csv/import'}" class="text-primary">
-                                <i class="fas fa-file-csv"></i> Import CSV Data
-                            </a>
-                        </li>
-                        <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
-                            <a th:href="${home + 'employee/csv/import'}" class="text-primary">
-                                <i class="fas fa-file-csv"></i> Generate Data
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Google Services</li>
@@ -228,3 +224,8 @@
     </div>
     <!-- End Sidebar scroll-->
 </aside>
+
+<form action="/api/csv/import-tickets" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv">
+    <button type="submit">Import CSV</button>
+</form>
