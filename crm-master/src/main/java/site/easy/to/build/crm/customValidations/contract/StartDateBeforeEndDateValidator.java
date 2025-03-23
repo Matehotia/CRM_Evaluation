@@ -3,25 +3,35 @@ package site.easy.to.build.crm.customValidations.contract;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import site.easy.to.build.crm.entity.Contract;
+import site.easy.to.build.crm.entity.Budget;
 
 import java.time.LocalDate;
 
-public class StartDateBeforeEndDateValidator implements ConstraintValidator<StartDateBeforeEndDate, Contract> {
+public class StartDateBeforeEndDateValidator implements ConstraintValidator<StartDateBeforeEndDate, Object> {
 
     @Override
-    public void initialize(StartDateBeforeEndDate constraintAnnotation) {
-    }
+    public boolean isValid(Object obj, ConstraintValidatorContext context) {
+        String start = null;
+        String end = null;
 
-    @Override
-    public boolean isValid(Contract contract, ConstraintValidatorContext context) {
-        if (contract == null ||contract.getStartDate() == null || contract.getEndDate() == null
-                || contract.getStartDate().isEmpty() || contract.getEndDate().isEmpty()) {
+        if (obj instanceof Contract contract) {
+            start = contract.getStartDate();
+            end = contract.getEndDate();
+        } else if (obj instanceof Budget budget) {
+            start = budget.getStartDate();
+            end = budget.getEndDate();
+        }
+
+        if (start == null || end == null || start.isEmpty() || end.isEmpty()) {
             return true;
         }
 
-        LocalDate startDate = LocalDate.parse(contract.getStartDate());
-        LocalDate endDate = LocalDate.parse(contract.getEndDate());
-
-        return startDate.isBefore(endDate);
+        try {
+            LocalDate startDate = LocalDate.parse(start);
+            LocalDate endDate = LocalDate.parse(end);
+            return startDate.isBefore(endDate);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
