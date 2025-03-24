@@ -1,11 +1,13 @@
 package site.easy.to.build.crm.service.budget; 
 
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import site.easy.to.build.crm.entity.Budget;
 import site.easy.to.build.crm.entity.Customer;
 import site.easy.to.build.crm.repository.BudgetRepository;
-
-import java.util.List;
 
 @Service
 public class BudgetServiceImpl implements BudgetService {
@@ -28,7 +30,9 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Override
     public List<Budget> getCustomerBudgets(int customerId) {
-        return budgetRepository.findByCustomerCustomerId(customerId);
+        List<Budget> budgets = budgetRepository.findByCustomerCustomerId(customerId);
+        System.out.println("Budgets trouvés pour le client avec ID: " + customerId + " - Nombre de budgets: " + budgets.size());
+        return budgets;
     }
 
     @Override
@@ -45,4 +49,5 @@ public class BudgetServiceImpl implements BudgetService {
     public void deleteAllByCustomer(Customer customer) {
         budgetRepository.deleteAllByCustomer(customer);
     }
+
 }

@@ -1,22 +1,27 @@
 package site.easy.to.build.crm.controller;
 
-import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.validation.Valid;
 import site.easy.to.build.crm.entity.Budget;
 import site.easy.to.build.crm.entity.Customer;
 import site.easy.to.build.crm.entity.User;
-import site.easy.to.build.crm.util.AuthenticationUtils;
 import site.easy.to.build.crm.service.budget.BudgetService;
 import site.easy.to.build.crm.service.customer.CustomerService;
 import site.easy.to.build.crm.service.user.UserService;
+import site.easy.to.build.crm.util.AuthenticationUtils;
 import site.easy.to.build.crm.util.AuthorizationUtil;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequestMapping("/employee/budget")
@@ -81,4 +86,15 @@ public class BudgetController {
         budgetService.save(budget);
         return "budget/create-budget";
     }
+
+
+    @GetMapping("/manager/all-budgets")
+    public String listAllBudgets(Model model) {
+        List<Budget> budgets = budgetService.findAll();
+        List<Customer> customers = customerService.findAll();
+        model.addAttribute("budgets", budgets);
+        model.addAttribute("customers", customers);
+        return "budget/list-budgets";
+    }
+
 }
