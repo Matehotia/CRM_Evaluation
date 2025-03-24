@@ -50,6 +50,11 @@
                                     CSV importer
                                 </a>
                             </li>
+                            <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+                                <a th:href="${home + 'employee/generate-data'}" class="text-primary">
+                                    <i class="fas fa-database"></i> Generate Data
+                                </a>
+                            </li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Google Services</li>

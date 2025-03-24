@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- Preloader -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
+</div>
+
+<!-- Main wrapper -->
+<div id="main-wrapper">
+    <!-- Header -->
+    <div th:insert="~{/general/header.html}"></div>
+    
+    <!-- Left Sidebar -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    
+    <!-- Page wrapper -->
+    <div class="page-wrapper">
+        <!-- Container fluid -->
+        <div class="container-fluid">
+            <!-- Bread crumb -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            
+            <!-- Messages d'alerte -->
+            <div class="alert alert-success alert-dismissible fade show" th:if="${success}" role="alert">
+                <i class="fas fa-check-circle"></i> 
+                <span th:text="${success}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="alert alert-danger alert-dismissible fade show" th:if="${error}" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <div class="alert alert-warning alert-dismissible fade show" th:if="${warning}" role="alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span th:text="${warning}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <!-- Start Page Content -->
+            <div class="row">
+                <!-- Column -->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Génération de données aléatoires</h4>
+                            <h6 class="card-subtitle">Générez des données de test pour votre système CRM</h6>
+                            <hr>
+                            
+                            <!-- Generation Form Section -->
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <form th:action="@{/employee/generate-data}" method="post" class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label for="entityType" class="col-sm-3 text-right control-label col-form-label">Type de données</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="entityType" name="entityType" required>
+                                                    <option value="">Sélectionnez un type</option>
+                                                    <option value="customers">Clients</option>
+                                                    <option value="budgets">Budgets</option>
+                                                    <option value="tickets">Tickets</option>
+                                                    <!-- Autres types à ajouter dans le futur -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="count" class="col-sm-3 text-right control-label col-form-label">Nombre d'enregistrements</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" id="count" name="count" min="1" max="1000" value="50" required>
+                                                <small class="form-text text-muted">Maximum: 1000 enregistrements</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-b-0">
+                                            <div class="offset-sm-3 col-sm-9">
+                                                <button type="submit" class="btn btn-info waves-effect waves-light">
+                                                    <i class="fas fa-database"></i> Générer les données
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                    <div class="card border-info">
+                                        <div class="card-header bg-info text-white">
+                                            <i class="fas fa-info-circle"></i> Informations
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">À propos de la génération de données</h5>
+                                            <p class="card-text">
+                                                Cette fonctionnalité vous permet de générer rapidement des données de test pour votre CRM.
+                                            </p>
+                                            <ul>
+                                                <li><strong>Clients</strong>: génère des clients aléatoires avec leurs informations de connexion</li>
+                                                <li><strong>Budgets</strong>: génère des budgets aléatoires associés aux clients existants</li>
+                                                <li><strong>Tickets</strong>: génère des tickets aléatoires associés aux clients existants</li>
+                                                <!-- Ajouter d'autres types par la suite -->
+                                            </ul>
+                                            <p class="card-text">
+                                                <small class="text-muted">Les données générées peuvent être utilisées pour tester les fonctionnalités de l'application.</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Page Content -->
+            
+            <!-- Right sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+        </div>
+        <!-- End Container fluid -->
+    </div>
+    <!-- End Page wrapper -->
+    
+    <!-- footer -->
+    <div th:insert="~{/general/footer.html}"></div>
+</div>
+<!-- End Wrapper -->
+
+<!-- All Jquery -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
+<script th:src="@{/js/library/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/library/popper.min.js}"></script>
+<script th:src="@{/js/library/bootstrap.min.js}"></script>
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}"></script>
+<script th:src="@{/js/library/waves.js}"></script>
+<script th:src="@{/js/library/sidebarmenu.js}"></script>
+<script th:src="@{/js/library/custom.min.js}"></script>
+
+</body>
+</html> 
