@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liste des Budgets par Client</title>
+    <!-- Custom CSS -->
+    <link th:href="@{/css/bootstrap-wysihtml5.css}" rel="stylesheet">
+    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <!-- Page CSS -->
+    <link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+    <style>
+        /* Styles pour la table */
+#budgetTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#budgetTable th,
+#budgetTable td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+#budgetTable th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+#budgetTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#budgetTable tr:hover {
+    background-color: #f1f1f1;
+}
+
+#customerSelect {
+    padding: 8px;
+    font-size: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200px;
+}
+
+#customerSelect option {
+    padding: 8px;
+}
+
+/* Style pour les cellules */
+#budgetTable td {
+    font-size: 14px;
+}
+
+/* Style pour le titre de la carte */
+.card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+    </style>
+    <script>
+        function filterBudgets() {
+            var select, filter, table, tr, td, i, txtValue;
+            select = document.getElementById("customerSelect");
+            filter = select.value.toUpperCase();
+            table = document.getElementById("budgetTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[5]; // Assuming customer name is in the 6th column
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (filter === "ALL" || txtValue.toUpperCase() === filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+    </script>
+</head>
+<body class="skin-blue fixed-layout">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">CRM</p>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <div th:insert="~{/general/header.html}"></div>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <div th:insert="~{/general/left-sidebar.html}"></div>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div th:insert="~{/general/page-titles.html}"></div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Liste des Budgets</h4>
+                                <select id="customerSelect" onchange="filterBudgets()">
+                                    <option value="ALL">Tous les clients</option>
+                                    <option th:each="customer : ${customers}" th:value="${customer.name}" th:text="${customer.name}"></option>
+                                </select>
+                                <div>
+                                    <p>Filtrer par date:</p>
+                                    <label for="startDate">Date de Début:</label>
+                                    <input type="date" id="startDate" onchange="filterByDate()">
+                                    <label for="endDate">Date de Fin:</label>
+                                    <input type="date" id="endDate" onchange="filterByDate()">
+                                </div>
+                                <table id="budgetTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID du Budget</th>
+                                            <th>Nom du Budget</th>
+                                            <th>Montant</th>
+                                            <th>Date de Début</th>
+                                            <th>Date de Fin</th>
+                                            <th>Nom du Client</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="budget : ${budgets}">
+                                            <td th:text="${budget.budgetId}"></td>
+                                            <td th:text="${budget.budgetName}"></td>
+                                            <td th:text="${budget.amount}"></td>
+                                            <td th:text="${budget.startDate}"></td>
+                                            <td th:text="${budget.endDate}"></td>
+                                            <td th:text="${budget.customer.name}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <button id="btn_prev" onclick="prevPage()">Précédent</button>
+                                    <button id="btn_next" onclick="nextPage()">Suivant</button>
+                                    <span>Page: <span id="page"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Page Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <div th:insert="~{/general/right-sidebar.html}"></div>
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <div th:insert="~{/general/footer.html}"></div>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script th:inline="javascript">
+        var home = /*[[${home}]]*/ null;
+    </script>
+    <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/waves.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/sticky-kit.min.js}"></script>
+    <script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/custom.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/library/wysihtml5-0.3.0.js}"></script>
+    <script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.textarea_editor').wysihtml5();
+        });
+    </script>
+    <script>
+        var currentPage = 1;
+        var recordsPerPage = 5;
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                changePage(currentPage);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < numPages()) {
+                currentPage++;
+                changePage(currentPage);
+            }
+        }
+
+        function changePage(page) {
+            var btnNext = document.getElementById("btn_next");
+            var btnPrev = document.getElementById("btn_prev");
+            var listingTable = document.getElementById("budgetTable");
+            var pageSpan = document.getElementById("page");
+
+            // Validate page
+            if (page < 1) page = 1;
+            if (page > numPages()) page = numPages();
+
+            for (var i = 1; i < listingTable.rows.length; i++) {
+                listingTable.rows[i].style.display = "none";
+            }
+
+            for (var i = (page - 1) * recordsPerPage + 1; i < (page * recordsPerPage) + 1; i++) {
+                if (listingTable.rows[i]) {
+                    listingTable.rows[i].style.display = "";
+                }
+            }
+
+            pageSpan.innerHTML = page;
+
+            if (page == 1) {
+                btnPrev.style.visibility = "hidden";
+            } else {
+                btnPrev.style.visibility = "visible";
+            }
+
+            if (page == numPages()) {
+                btnNext.style.visibility = "hidden";
+            } else {
+                btnNext.style.visibility = "visible";
+            }
+        }
+
+        function numPages() {
+            return Math.ceil((document.getElementById("budgetTable").rows.length - 1) / recordsPerPage);
+        }
+
+        window.onload = function() {
+            changePage(1);
+        };
+    </script>
+    <script>
+        function filterByDate() {
+            var startDate = new Date(document.getElementById("startDate").value);
+            var endDate = new Date(document.getElementById("endDate").value);
+            var table = document.getElementById("budgetTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdStartDate = tr[i].getElementsByTagName("td")[3]; // Assuming start date is in the 4th column
+                var tdEndDate = tr[i].getElementsByTagName("td")[4]; // Assuming end date is in the 5th column
+                if (tdStartDate && tdEndDate) {
+                    var budgetStartDate = new Date(tdStartDate.textContent || tdStartDate.innerText);
+                    var budgetEndDate = new Date(tdEndDate.textContent || tdEndDate.innerText);
+                    if ((isNaN(startDate) || budgetStartDate >= startDate) && (isNaN(endDate) || budgetEndDate <= endDate)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
