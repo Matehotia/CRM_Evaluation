@@ -315,6 +315,7 @@ public class DataGenerationController {
                     
                     if (assignManager) {
                         managerId = employeeIds.get(random.nextInt(employeeIds.size()));
+                        employeeId = managerId;
                     } else {
                         employeeId = employeeIds.get(random.nextInt(employeeIds.size()));
                     }
